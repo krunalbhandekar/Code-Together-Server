@@ -1,10 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import bodyParser from "body-parser";
 import path from "path";
-import routerInit from "./router";
 import http from "http";
+import bodyParser from "body-parser";
+import DB from "./utils/services/mongodb";
+import routerInit from "./router";
 
 // Load the environment variables from .env file
 const envLoaded = dotenv.config({ path: `${__dirname}/.env` });
@@ -12,6 +13,14 @@ if (envLoaded.error) {
   console.log("Unable to load .env file, please check.");
   process.exit();
 }
+
+// Initialize the Mongo DB connection
+DB.init((err: unknown) => {
+  if (err instanceof Error) {
+    console.log("Error connectiong to database", err);
+    process.exit();
+  }
+});
 
 // Initialize the express
 const app = express();
