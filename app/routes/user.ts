@@ -28,8 +28,9 @@ router.post("/register", async (req: Request, res: Response) => {
 
     const otp: string = generateOtp();
 
-    const user = existingUser || new User({ name, email, password });
+    const user = existingUser || new User({ name, email });
 
+    user.password = password;
     user.otp = otp;
     user.otpExpiredAt = Date.now() + 5 * 60 * 100; // Otp expires in 5 minute
     await user.save();

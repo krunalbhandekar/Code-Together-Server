@@ -12,7 +12,7 @@ const UserSchema = new Schema<IUser>(
     password: { type: String, select: false },
     otp: { type: String },
     otpExpiredAt: { type: Number },
-    isVerified: { type: Boolean },
+    isVerified: { type: Boolean, default: false },
   },
   {
     timestamps: true,
