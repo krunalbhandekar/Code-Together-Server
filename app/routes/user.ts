@@ -37,7 +37,7 @@ router.post("/register", async (req: Request, res: Response) => {
 
     UserHook.afterCreate(user._id);
 
-    await sendEmailNotification({ to: user.email, subject: "Otp" });
+    await sendEmailNotification({ to: user.email, subject: "Otp", text: otp });
 
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS });
   } catch (err: unknown) {
