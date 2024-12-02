@@ -93,7 +93,10 @@ router.post("/login", async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const user: IUser | null = await User.findOne({ email });
+    const user: IUser | null = await User.findOne({ email }).select(
+      "+password"
+    );
+
     if (!user || !user.isVerified) {
       res
         .status(HttpStatus.OK)
