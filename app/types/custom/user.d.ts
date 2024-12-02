@@ -9,3 +9,7 @@ interface IUser {
   otpExpiredAt: number;
   isVerified: boolean;
 }
+
+interface IJwtPayload {
+  userId: ObjectId;
+}

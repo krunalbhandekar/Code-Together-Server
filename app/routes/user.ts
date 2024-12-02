@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import HttpStatus from "http-status";
 import jsonwebtoken from "jsonwebtoken";
 import Status from "../types/enums/status";
-import { IUser } from "../types/custom/user";
+import { IJwtPayload, IUser } from "../types/custom/user";
 import ErrorMessages from "../types/enums/error-messages";
 import User from "../models/user";
 import UserHook from "../utils/hooks/user";
@@ -109,15 +109,15 @@ router.post("/login", async (req: Request, res: Response) => {
       return;
     }
 
-    const payload = { id: user._id };
+    const payload: IJwtPayload = { userId: user._id };
     const token = jsonwebtoken.sign(
       payload,
-      process.env.JWT_SECRET || "jwt-secret",
+      process.env.JWT_SECRET || "secret",
       { expiresIn: "24h" }
     );
 
     res.status(HttpStatus.OK).send({
-      status: Status.ERROR,
+      status: Status.SUCCESS,
       token,
       user: { _id: user._id, name: user.name, email: user.email },
     });
