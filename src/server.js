@@ -10,10 +10,15 @@ import routerInit from "./router.js";
 
 // Deriving __dirname from import.meta.url
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
+console.log("dirname", __dirname);
+
 // Remove any leading slash from the path to fix Windows path issue
 const fixedDirname = __dirname.startsWith("/") ? __dirname.slice(1) : __dirname;
+console.log("fixedDirname", fixedDirname);
+
 // Normalize the path to the .env file
 const envPath = path.join(fixedDirname, ".env");
+console.log("env path", envPath);
 
 // Load the environment variables from the .env file
 const envLoaded = dotenv.config({ path: envPath });
