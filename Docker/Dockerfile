@@ -17,7 +17,7 @@ COPY ../ ./
 RUN yarn global add rollup
 
 # Build the application using Rollup
-RUN yarn build
+RUN yarn run build
 
 # Install additional dependencies for language support
 RUN apt-get update && apt-get install -y \
