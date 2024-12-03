@@ -4,8 +4,9 @@ import cors from "cors";
 import path from "path";
 import http from "http";
 import bodyParser from "body-parser";
-import DB from "./utils/services/mongodb";
 import routerInit from "./router";
+import DB from "./utils/services/mongodb";
+import { socketInit } from "./utils/services/socket";
 
 // Load the environment variables from .env file
 const envLoaded = dotenv.config({ path: `${__dirname}/.env` });
@@ -41,5 +42,8 @@ routerInit(app);
 
 // Server is created
 const server = new http.Server(app);
+
+// Initialize Socket.io for real-time collaboration
+socketInit(server);
 
 export default server;
