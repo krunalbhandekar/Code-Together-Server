@@ -20,6 +20,45 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/collab", async (req: Request, res: Response) => {
+  try {
+    const files = await File.find({ createdBy: req.user._id });
+    res
+      .status(HttpStatus.OK)
+      .send({ status: Status.SUCCESS, collabFiles: files });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log("[getCollabFiles]", err.message);
+    }
+    res
+      .status(HttpStatus.OK)
+      .send({ status: Status.ERROR, error: ErrorMessages.E1003 });
+  }
+});
+
+router.get("/:id", async (req: Request, res: Response) => {
+  const _id: string = req.params.id;
+  try {
+    const file = await File.findOne({ _id }).populate([
+      { path: "createdBy", select: { name: true, email: true } },
+    ]);
+    if (!file) {
+      res
+        .status(HttpStatus.OK)
+        .send({ status: Status.ERROR, error: "File does not exists" });
+      return;
+    }
+    res.status(HttpStatus.OK).send({ status: Status.SUCCESS, file });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log("[getFile]", err.message);
+    }
+    res
+      .status(HttpStatus.OK)
+      .send({ status: Status.ERROR, error: ErrorMessages.E1003 });
+  }
+});
+
 router.post("/", async (req: Request, res: Response) => {
   try {
     const { name, language } = req.body;
