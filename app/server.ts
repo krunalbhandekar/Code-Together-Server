@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 import routerInit from "./router";
 import DB from "./utils/services/mongodb";
 import { socketInit } from "./utils/services/socket";
+import httpStatus from "http-status";
 
 // Load the environment variables from .env file
 const envLoaded = dotenv.config({ path: `${__dirname}/.env` });
@@ -36,6 +37,10 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.get("/", async (req: Request, res: Response) => {
+  res.status(httpStatus.OK).send({ status: "success", message: "done" });
+});
 
 // Initialize the routes
 routerInit(app);
