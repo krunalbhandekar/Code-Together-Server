@@ -13,6 +13,9 @@ RUN yarn install
 # Copy the rest of the application code
 COPY ../ ./
 
+# Ensure Rollup is installed globally (optional but useful for quick debugging)
+RUN yarn global add rollup
+
 # Build the application using Rollup
 RUN yarn build
 
