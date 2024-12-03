@@ -1,7 +1,6 @@
-import { ObjectId } from "mongoose";
-import User from "../../models/user";
+import User from "../../models/user.js";
 
-const afterCreate = async (_id: ObjectId) => {
+const afterCreate = async (_id) => {
   const user = await User.findOne({ _id });
   if (!user) return false;
 };

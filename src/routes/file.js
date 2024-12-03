@@ -1,16 +1,16 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import HttpStatus from "http-status";
-import Status from "../types/enums/status";
-import ErrorMessages from "../types/enums/error-messages";
-import File from "../models/file";
+import File from "../models/file.js";
+import Status from "../utils/enums/status.js";
+import ErrorMessages from "../utils/enums/error-messages.js";
 
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req, res) => {
   try {
     const files = await File.find({ createdBy: req.user._id });
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, files });
-  } catch (err: unknown) {
+  } catch (err) {
     if (err instanceof Error) {
       console.log("[getFiles]", err.message);
     }
@@ -20,13 +20,13 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/collab", async (req: Request, res: Response) => {
+router.get("/collab", async (req, res) => {
   try {
     const files = await File.find({ createdBy: req.user._id });
     res
       .status(HttpStatus.OK)
       .send({ status: Status.SUCCESS, collabFiles: files });
-  } catch (err: unknown) {
+  } catch (err) {
     if (err instanceof Error) {
       console.log("[getCollabFiles]", err.message);
     }
@@ -36,8 +36,8 @@ router.get("/collab", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
-  const _id: string = req.params.id;
+router.get("/:id", async (req, res) => {
+  const _id = req.params.id;
   try {
     const file = await File.findOne({ _id }).populate([
       { path: "createdBy", select: { name: true, email: true } },
@@ -49,7 +49,7 @@ router.get("/:id", async (req: Request, res: Response) => {
       return;
     }
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, file });
-  } catch (err: unknown) {
+  } catch (err) {
     if (err instanceof Error) {
       console.log("[getFile]", err.message);
     }
@@ -59,7 +59,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", async (req, res) => {
   try {
     const { name, language } = req.body;
     const file = await File.create({
@@ -69,7 +69,7 @@ router.post("/", async (req: Request, res: Response) => {
       createdBy: req?.user ? req.user._id : null,
     });
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, file });
-  } catch (err: unknown) {
+  } catch (err) {
     if (err instanceof Error) {
       console.log("[createFile]", err.message);
     }
@@ -79,8 +79,8 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-router.delete("/:id", async (req: Request, res: Response) => {
-  const _id: string = req.params.id;
+router.delete("/:id", async (req, res) => {
+  const _id = req.params.id;
   try {
     const file = await File.findOne({ _id, createdBy: req.user._id });
     if (!file) {
@@ -98,7 +98,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
     res
       .status(HttpStatus.OK)
       .send({ status: Status.ERROR, error: "Unable to delete the file" });
-  } catch (err: unknown) {
+  } catch (err) {
     if (err instanceof Error) {
       console.log("[deleteFile]", err.message);
     }

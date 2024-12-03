@@ -1,14 +1,6 @@
 import nodemailer from "nodemailer";
 
-interface INodeMailerPayload {
-  to: string;
-  subject: string;
-  text?: string;
-  html?: string; // "<h1>This is an html email</h1>"
-  attachments?: { filename: string; path: string }[]; // [{filename: 'example.txt', path: './example.txt'}]
-}
-
-const sendEmailNotification = async (payload: INodeMailerPayload) => {
+const sendEmailNotification = async (payload) => {
   setTimeout(async () => {
     try {
       const transporter = nodemailer.createTransport({

@@ -1,11 +1,10 @@
 import bcrypt from "bcryptjs";
-import DB from "../utils/services/mongodb";
-import { IUser } from "../types/custom/user";
+import DB from "../utils/services/mongodb.js";
 
 const mongoose = DB.getInstance();
 const { Schema } = mongoose;
 
-const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema(
   {
     name: { type: String },
     email: { type: String },
@@ -41,4 +40,4 @@ UserSchema.pre("save", function save(next) {
   }
 });
 
-export default mongoose.model<IUser>("User", UserSchema);
+export default mongoose.model("User", UserSchema);

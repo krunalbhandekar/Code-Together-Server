@@ -1,4 +1,4 @@
-import OS from "../helper/os";
+import OS from "../helper/os.js";
 
 const javascript = [
   "run",

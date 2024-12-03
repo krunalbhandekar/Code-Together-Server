@@ -1,10 +1,9 @@
-import DB from "../utils/services/mongodb";
-import { IFile } from "../types/custom/file";
+import DB from "../utils/services/mongodb.js";
 
 const mongoose = DB.getInstance();
 const { Schema } = mongoose;
 
-const FileSchema = new Schema<IFile>(
+const FileSchema = new Schema(
   {
     name: { type: String },
     language: { type: String },
@@ -16,4 +15,4 @@ const FileSchema = new Schema<IFile>(
   }
 );
 
-export default mongoose.model<IFile>("File", FileSchema);
+export default mongoose.model("File", FileSchema);

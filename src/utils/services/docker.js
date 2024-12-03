@@ -1,14 +1,7 @@
 import { spawn } from "child_process";
-import DOCKER_CMD from "../constants/docker";
-import { Socket } from "socket.io";
+import DOCKER_CMD from "../constants/docker.js";
 
-interface IRunDocker {
-  socket: Socket;
-  language: "javascript" | "java" | "python" | "ruby" | "go";
-  content: string;
-}
-
-const runDocker = ({ socket, language, content }: IRunDocker) => {
+const runDocker = ({ socket, language, content }) => {
   const docker = spawn("docker", DOCKER_CMD[language]);
 
   let hasOutput = false; // Flag to track if ther's any output

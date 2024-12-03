@@ -1,24 +1,21 @@
-import express, { Request, Response } from "express";
-import mongoose from "mongoose";
-import HttpStatus from "http-status";
+import express from "express";
 import jsonwebtoken from "jsonwebtoken";
-import Status from "../types/enums/status";
-import { IJwtPayload, IUser } from "../types/custom/user";
-import ErrorMessages from "../types/enums/error-messages";
-import User from "../models/user";
-import UserHook from "../utils/hooks/user";
-import generateOtp from "../utils/helper/generateOtp";
-import comparePassword from "../utils/helper/comparePassword";
-import sendEmailNotification from "../utils/services/nodemailer";
+import HttpStatus from "http-status";
+import User from "../models/user.js";
+import Status from "../utils/enums/status.js";
+import UserHook from "../utils/hooks/user.js";
+import generateOtp from "../utils/helper/generateOtp.js";
+import ErrorMessages from "../utils/enums/error-messages.js";
+import comparePassword from "../utils/helper/comparePassword.js";
+import sendEmailNotification from "../utils/services/nodemailer.js";
 
 const router = express.Router();
 
-router.post("/register", async (req: Request, res: Response) => {
+router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    type userType = IUser & mongoose.Document;
-    const existingUser: userType | null = await User.findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (existingUser && existingUser.isVerified) {
       res
         .status(HttpStatus.OK)
@@ -26,7 +23,7 @@ router.post("/register", async (req: Request, res: Response) => {
       return;
     }
 
-    const otp: string = generateOtp();
+    const otp = generateOtp();
 
     const user = existingUser || new User({ name, email });
 
@@ -40,7 +37,7 @@ router.post("/register", async (req: Request, res: Response) => {
     await sendEmailNotification({ to: user.email, subject: "Otp", text: otp });
 
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS });
-  } catch (err: unknown) {
+  } catch (err) {
     if (err instanceof Error) {
       console.log("[registerUser]", err.message);
     }
@@ -50,12 +47,11 @@ router.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/verify-otp", async (req: Request, res: Response) => {
+router.post("/verify-otp", async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    type userType = IUser & mongoose.Document;
-    const user: userType | null = await User.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user) {
       res
         .status(HttpStatus.OK)
@@ -79,7 +75,7 @@ router.post("/verify-otp", async (req: Request, res: Response) => {
     await user.save();
 
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS });
-  } catch (err: unknown) {
+  } catch (err) {
     if (err instanceof Error) {
       console.log("[verifyOtp]", err.message);
     }
@@ -89,13 +85,11 @@ router.post("/verify-otp", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user: IUser | null = await User.findOne({ email }).select(
-      "+password"
-    );
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user || !user.isVerified) {
       res
@@ -104,7 +98,7 @@ router.post("/login", async (req: Request, res: Response) => {
       return;
     }
 
-    const isMatch: boolean = await comparePassword(password, user.password);
+    const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
       res
         .status(HttpStatus.OK)
@@ -112,7 +106,7 @@ router.post("/login", async (req: Request, res: Response) => {
       return;
     }
 
-    const payload: IJwtPayload = { userId: user._id };
+    const payload = { userId: user._id };
     const token = jsonwebtoken.sign(
       payload,
       process.env.JWT_SECRET || "secret",
@@ -124,7 +118,7 @@ router.post("/login", async (req: Request, res: Response) => {
       token,
       user: { _id: user._id, name: user.name, email: user.email },
     });
-  } catch (err: unknown) {
+  } catch (err) {
     if (err instanceof Error) {
       console.log("[loginUser]", err.message);
     }

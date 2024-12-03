@@ -1,12 +1,11 @@
-import { Server } from "http";
-import { Socket, Server as SocketServer } from "socket.io";
-import File from "../../models/file";
-import runDocker from "./docker";
+import { Server as SocketServer } from "socket.io";
+import File from "../../models/file.js";
+import runDocker from "./docker.js";
 
-let io: SocketServer | null = null;
-let socketInstance: Socket | null = null;
+let io = null;
+let socketInstance = null;
 
-const socketInit = (server: Server) => {
+const socketInit = (server) => {
   io = new SocketServer(server, {
     cors: { origin: process.env.REACT_APP_URL },
   });

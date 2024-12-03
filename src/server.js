@@ -1,23 +1,30 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
 import http from "http";
 import bodyParser from "body-parser";
-import routerInit from "./router";
-import DB from "./utils/services/mongodb";
-import { socketInit } from "./utils/services/socket";
+import DB from "./utils/services/mongodb.js";
 import httpStatus from "http-status";
+import routerInit from "./router.js";
 
-// Load the environment variables from .env file
-const envLoaded = dotenv.config({ path: `${__dirname}/.env` });
+// Deriving __dirname from import.meta.url
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+// Remove any leading slash from the path to fix Windows path issue
+const fixedDirname = __dirname.startsWith("/") ? __dirname.slice(1) : __dirname;
+// Normalize the path to the .env file
+const envPath = path.join(fixedDirname, ".env");
+
+// Load the environment variables from the .env file
+const envLoaded = dotenv.config({ path: envPath });
 if (envLoaded.error) {
   console.log("Unable to load .env file, please check.");
   process.exit();
+} else {
+  console.log("Environment loaded successfully:");
 }
-
 // Initialize the Mongo DB connection
-DB.init((err: unknown) => {
+DB.init((err) => {
   if (err instanceof Error) {
     console.log("Error connectiong to database", err);
     process.exit();
@@ -36,9 +43,8 @@ app.use(
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.get("/", async (req: Request, res: Response) => {
+app.get("/", async (_, res) => {
   res.status(httpStatus.OK).send({ status: "success", message: "done" });
 });
 
@@ -48,7 +54,7 @@ routerInit(app);
 // Server is created
 const server = new http.Server(app);
 
-// Initialize Socket.io for real-time collaboration
-socketInit(server);
-
-export default server;
+const port = process.env.SERVER_PORT;
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
