@@ -7,6 +7,9 @@ import bodyParser from "body-parser";
 import DB from "./utils/services/mongodb.js";
 import httpStatus from "http-status";
 import routerInit from "./router.js";
+import fs from "fs";
+
+console.log("File system:", fs.readdirSync("/opt/render/project/src"));
 
 // Deriving __dirname from import.meta.url
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
