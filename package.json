@@ -6,8 +6,9 @@
   "author": "Krunal Bhandekar",
   "license": "MIT",
   "scripts": {
-    "start": "yarn rollup -c -w",
-    "build": "yarn rollup -c"
+    "dev": "yarn rollup -c -w",
+    "build": "yarn rollup -c",
+    "start": "node dist/server.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
