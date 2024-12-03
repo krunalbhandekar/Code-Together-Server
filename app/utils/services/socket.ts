@@ -1,6 +1,7 @@
 import { Server } from "http";
 import { Socket, Server as SocketServer } from "socket.io";
 import File from "../../models/file";
+import runDocker from "./docker";
 
 let io: SocketServer | null = null;
 let socketInstance: Socket | null = null;
@@ -24,6 +25,10 @@ const socketInit = (server: Server) => {
 
       file.content = content;
       await file.save();
+    });
+
+    socket.on("execute-code", ({ language, content }) => {
+      runDocker({ socket, language, content });
     });
 
     socket.on("disconnect", () => {
