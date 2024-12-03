@@ -16,9 +16,13 @@ console.log("dirname", __dirname);
 const fixedDirname = __dirname.startsWith("/") ? __dirname.slice(1) : __dirname;
 console.log("fixedDirname", fixedDirname);
 
-// Normalize the path to the .env file
-const envPath = path.join(fixedDirname, ".env");
-console.log("env path", envPath);
+// Ensure the path points directly to the .env file in the project root
+// Using the correct project directory, skipping 'src' part if necessary
+const envPath = path.join(
+  fixedDirname.split("/").slice(0, -1).join("/"),
+  ".env"
+);
+console.log("Resolved .env path:", envPath);
 
 // Load the environment variables from the .env file
 const envLoaded = dotenv.config({ path: envPath });
