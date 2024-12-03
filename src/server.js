@@ -7,34 +7,33 @@ import bodyParser from "body-parser";
 import DB from "./utils/services/mongodb.js";
 import httpStatus from "http-status";
 import routerInit from "./router.js";
-import fs from "fs";
 
-console.log("File system:", fs.readdirSync("/opt/render/project/src"));
+if (process.env.NODE_ENV !== "prod") {
+  // Deriving __dirname from import.meta.url
+  const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-// Deriving __dirname from import.meta.url
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
-console.log("dirname", __dirname);
+  // Remove any leading slash from the path to fix Windows path issue
+  const fixedDirname = __dirname.startsWith("/")
+    ? __dirname.slice(1)
+    : __dirname;
 
-// Remove any leading slash from the path to fix Windows path issue
-const fixedDirname = __dirname.startsWith("/") ? __dirname.slice(1) : __dirname;
-console.log("fixedDirname", fixedDirname);
+  // Ensure the path points directly to the .env file in the project root
+  // Using the correct project directory, skipping 'src' part if necessary
+  const envPath = path.join(
+    fixedDirname.split("/").slice(0, -1).join("/"),
+    ".env"
+  );
 
-// Ensure the path points directly to the .env file in the project root
-// Using the correct project directory, skipping 'src' part if necessary
-const envPath = path.join(
-  fixedDirname.split("/").slice(0, -1).join("/"),
-  ".env"
-);
-console.log("Resolved .env path:", envPath);
-
-// Load the environment variables from the .env file
-const envLoaded = dotenv.config({ path: envPath });
-if (envLoaded.error) {
-  console.log("Unable to load .env file, please check.");
-  process.exit();
-} else {
-  console.log("Environment loaded successfully:");
+  // Load the environment variables from the .env file
+  const envLoaded = dotenv.config({ path: envPath });
+  if (envLoaded.error) {
+    console.log("Unable to load .env file, please check.");
+    process.exit();
+  } else {
+    console.log("Environment loaded successfully:");
+  }
 }
+
 // Initialize the Mongo DB connection
 DB.init((err) => {
   if (err instanceof Error) {
