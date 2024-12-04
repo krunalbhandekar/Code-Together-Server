@@ -8,6 +8,8 @@ let socketInstance = null;
 const socketInit = (server) => {
   io = new SocketServer(server, {
     cors: { origin: process.env.REACT_APP_URL },
+    methods: ["GET", "POST"],
+    transports: ["websocket", "polling"],
   });
 
   io.on("connection", (socket) => {
