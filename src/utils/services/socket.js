@@ -7,7 +7,7 @@ let socketInstance = null;
 
 const socketInit = (server) => {
   io = new SocketServer(server, {
-    cors: { origin: process.env.REACT_APP_URL },
+    cors: { origin: "*" },
     methods: ["GET", "POST"],
     transports: ["websocket", "polling"],
   });
