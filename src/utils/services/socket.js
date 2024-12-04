@@ -6,11 +6,7 @@ let io = null;
 let socketInstance = null;
 
 const socketInit = (server) => {
-  io = new SocketServer(server, {
-    cors: { origin: "*" },
-    methods: ["GET", "POST"],
-    transports: ["websocket", "polling"],
-  });
+  io = new SocketServer(server);
 
   io.on("connection", (socket) => {
     socketInstance = socket;
