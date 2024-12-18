@@ -42,7 +42,7 @@ const server = http.createServer(app);
 // Initialize the Socket.io
 socketInit(server);
 
-const port = process.env.SERVER_PORT;
+const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
