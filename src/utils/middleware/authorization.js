@@ -1,6 +1,7 @@
 import HttpStatus from "http-status";
 import jsonwebtoken from "jsonwebtoken";
 import User from "../../models/user.js";
+import Status from "../enums/status.js";
 
 const authorization = async (req, res, next) => {
   const token = req.headers.authorization;

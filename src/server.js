@@ -36,6 +36,9 @@ DB.init((err) => {
 // Initialize the express
 const app = express();
 
+app.use(bodyParser.json());
+app.use(express.json());
+
 app.use(
   cors({
     origin: process.env.REACT_APP_URL, // Frontend origin
@@ -43,18 +46,13 @@ app.use(
   })
 );
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get("/", async (_, res) => {
-  res.status(httpStatus.OK).send({ status: "success", message: "done" });
-});
 
 // Initialize the routes
 routerInit(app);
 
 // Server is created
-const server = new http.Server(app);
+const server = http.createServer(app);
 
 // Initialize the Socket.io
 socketInit(server);
