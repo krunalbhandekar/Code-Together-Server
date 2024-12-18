@@ -8,22 +8,7 @@ import DB from "./utils/services/mongodb.js";
 import httpStatus from "http-status";
 import routerInit from "./router.js";
 import { socketInit } from "./utils/services/socket.js";
-
-if (process.env.NODE_ENV !== "prod") {
-  const __dirname = path.dirname(new URL(import.meta.url).pathname);
-  const fixedDirname = __dirname.startsWith("/")
-    ? __dirname.slice(1)
-    : __dirname;
-  const envPath = path.join(fixedDirname, ".env");
-
-  const envLoaded = dotenv.config({ path: envPath });
-  if (envLoaded.error) {
-    console.log("Unable to load .env file, please check.");
-    process.exit();
-  } else {
-    console.log("Environment loaded successfully:");
-  }
-}
+dotenv.config();
 
 // Initialize the Mongo DB connection
 DB.init((err) => {

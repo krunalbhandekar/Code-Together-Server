@@ -1,6 +1,8 @@
 import { Server as SocketServer } from "socket.io";
 import File from "../../models/file.js";
 import runDocker from "./docker.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 let io = null;
 let socketInstance = null;

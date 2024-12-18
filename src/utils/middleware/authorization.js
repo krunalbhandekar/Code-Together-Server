@@ -2,6 +2,8 @@ import HttpStatus from "http-status";
 import jsonwebtoken from "jsonwebtoken";
 import User from "../../models/user.js";
 import Status from "../enums/status.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const authorization = async (req, res, next) => {
   const token = req.headers.authorization;

@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 const init = (cb) => {
   const MONGO_URL = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.1cygt.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;

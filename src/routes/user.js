@@ -8,6 +8,8 @@ import generateOtp from "../utils/helper/generateOtp.js";
 import ErrorMessages from "../utils/enums/error-messages.js";
 import comparePassword from "../utils/helper/comparePassword.js";
 import sendEmailNotification from "../utils/services/nodemailer.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const router = express.Router();
 
