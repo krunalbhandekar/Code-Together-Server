@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "repository": "https://github.com/krunalbhandekar/Code-Together-Server.git",
   "scripts": {
-    "start": "sh ./setup.sh",
+    "start": "nodemon src/server.js",
     "build": "npm install"
   },
   "author": "Krunal Bhandekar",
