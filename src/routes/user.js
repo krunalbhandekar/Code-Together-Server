@@ -1,5 +1,6 @@
 import express from "express";
 import jsonwebtoken from "jsonwebtoken";
+import dotenv from "dotenv";
 import HttpStatus from "http-status";
 import User from "../models/user.js";
 import Status from "../utils/enums/status.js";
@@ -8,6 +9,8 @@ import generateOtp from "../utils/helper/generateOtp.js";
 import UserHook from "../utils/hooks/user.js";
 import logger from "../utils/logger.js";
 import comparePassword from "../utils/helper/comparePassword.js";
+
+dotenv.config();
 
 const router = express.Router();
 
