@@ -84,14 +84,14 @@ router.delete("/:id", async (req, res) => {
 
     res
       .status(HttpStatus.OK)
-      .send({ status: Status.ERROR, error: ErrorMessages.E1005 });
+      .send({ status: Status.ERROR, error: ErrorMessages.E1004 });
   } catch (err) {
     if (err instanceof Error) {
       console.log("[delete-file]", err.message);
     }
     res
       .status(HttpStatus.OK)
-      .send({ status: Status.ERROR, error: ErrorMessages.E1005 });
+      .send({ status: Status.ERROR, error: ErrorMessages.E1004 });
   }
 });
 
