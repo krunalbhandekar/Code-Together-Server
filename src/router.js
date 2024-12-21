@@ -1,15 +1,26 @@
+import HttpStatus from "http-status";
+import dotenv from "dotenv";
 import userRouter from "./routes/user.js";
 import fileRouter from "./routes/file.js";
 import invitationRouter from "./routes/invitation.js";
 import geminiRouter from "./routes/invitation.js";
 import authorization from "./utils/middleware/authorization.js";
 
+dotenv.config();
+
 const routerInit = (app) => {
   app.get("/", async (_, res) => {
-    res.send({
+    res.status(HttpStatus.OK).send({
       status: "success",
-      message: "This is the server of Code Together project",
-      author: "Krunal Bhandekar",
+      name: "Code-Together-Server",
+      version: "0.0.1",
+      description: "This is the server of code together project",
+      client: process.env.REACT_APP_URL,
+      author: {
+        name: "Krunal Bhandekar",
+        designation: "Full Stack Web Developer",
+        email: "krunalbhandekar10@gmail.com",
+      },
     });
   });
   app.use("/user", userRouter);
