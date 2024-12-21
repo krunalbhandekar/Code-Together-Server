@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import userRouter from "./routes/user.js";
 import fileRouter from "./routes/file.js";
 import invitationRouter from "./routes/invitation.js";
-import geminiRouter from "./routes/invitation.js";
+import geminiRouter from "./routes/gemini.js";
 import feedbackRouter from "./routes/feedback.js";
 import authorization from "./utils/middleware/authorization.js";
 

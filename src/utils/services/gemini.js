@@ -1,10 +1,10 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
-import Status from "../enums/status";
+import Status from "../enums/status.js";
 
 dotenv.config();
 
-const getGeminiResponse = async ({ prompt = "1+1" }) => {
+const getGeminiResponse = async ({ prompt }) => {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const GeminiModel = genAI.getGenerativeModel({
     model: process.env.GEMINI_MODEL,

@@ -1,0 +1,7 @@
+// Steps to create redis server/url on render
+    1.  Click +New
+    2.  Select redis
+    3.  Enter Name, Region, Instance Type
+    4.  Click Create Redis
+    5.  At bottom -> Enter source (0.0.0.0/0) in Access control menu -> save
+    6.  External Redis URL from Connections menu is the actual redis url
