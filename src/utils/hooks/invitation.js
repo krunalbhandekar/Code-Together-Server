@@ -11,7 +11,7 @@ const afterCreate = async (_id) => {
 
   await sendEmailNotification({
     to: invitation.receiverEmail,
-    subject: "Invition for collaborator",
+    subject: "Invition for collaboration",
     text: `${invitation.sender.name} invited you`,
   });
 };
