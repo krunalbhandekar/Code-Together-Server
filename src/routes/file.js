@@ -5,6 +5,7 @@ import Status from "../utils/enums/status.js";
 import logger from "../utils/logger.js";
 import ErrorMessages from "../utils/enums/error-messages.js";
 import FileHook from "../utils/hooks/file.js";
+import Invitation from "../models/invitation.js";
 
 const router = express.Router();
 
@@ -12,6 +13,25 @@ router.get("/", async (req, res) => {
   try {
     const files = await File.find({ createdBy: req.user._id });
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, files });
+  } catch (err) {
+    if (err instanceof Error) {
+      logger.error("[get-files]", err.message);
+    }
+    res
+      .status(HttpStatus.OK)
+      .send({ status: Status.ERROR, error: ErrorMessages.E1001 });
+  }
+});
+
+router.get("/collab", async (req, res) => {
+  try {
+    const fileIds = await Invitation.find({
+      receiver: req.user._id,
+      status: "Accepted",
+    }).distinct("file");
+
+    const collabFiles = await File.find({ _id: { $in: fileIds } });
+    res.status(HttpStatus.OK).send({ status: Status.SUCCESS, collabFiles });
   } catch (err) {
     if (err instanceof Error) {
       logger.error("[get-files]", err.message);
@@ -74,9 +94,10 @@ router.delete("/:id", async (req, res) => {
   try {
     const file = await File.findOne({ _id, createdBy: req.user._id });
     if (!file) {
-      return res
-        .status(HttpStatus.OK)
-        .send({ status: Status.ERROR, error: "File does not exists" });
+      return res.status(HttpStatus.OK).send({
+        status: Status.ERROR,
+        error: "File does not exists you are not allow to delete file",
+      });
     }
 
     const result = await File.deleteOne({ _id });
