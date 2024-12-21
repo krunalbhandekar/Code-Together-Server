@@ -2,6 +2,7 @@ import express from "express";
 import HttpStatus from "http-status";
 import File from "../models/file.js";
 import Status from "../utils/enums/status.js";
+import logger from "../utils/logger.js";
 import ErrorMessages from "../utils/enums/error-messages.js";
 
 const router = express.Router();
@@ -12,7 +13,7 @@ router.get("/", async (req, res) => {
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, files });
   } catch (err) {
     if (err instanceof Error) {
-      console.log("[get-files]", err.message);
+      logger.error("[get-files]", err.message);
     }
     res
       .status(HttpStatus.OK)
@@ -36,7 +37,7 @@ router.get("/:id", async (req, res) => {
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, file });
   } catch (err) {
     if (err instanceof Error) {
-      console.log("[get-File]", err.message);
+      logger.error("[get-File]", err.message);
     }
     res
       .status(HttpStatus.OK)
@@ -58,7 +59,7 @@ router.post("/", async (req, res) => {
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, file });
   } catch (err) {
     if (err instanceof Error) {
-      console.log("[create-file]", err.message);
+      logger.error("[create-file]", err.message);
     }
     res
       .status(HttpStatus.OK)
@@ -87,7 +88,7 @@ router.delete("/:id", async (req, res) => {
       .send({ status: Status.ERROR, error: ErrorMessages.E1004 });
   } catch (err) {
     if (err instanceof Error) {
-      console.log("[delete-file]", err.message);
+      logger.error("[delete-file]", err.message);
     }
     res
       .status(HttpStatus.OK)

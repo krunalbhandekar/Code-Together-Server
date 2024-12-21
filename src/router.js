@@ -1,6 +1,7 @@
 import userRouter from "./routes/user.js";
 import fileRouter from "./routes/file.js";
 import invitationRouter from "./routes/invitation.js";
+import geminiRouter from "./routes/invitation.js";
 import authorization from "./utils/middleware/authorization.js";
 
 const routerInit = (app) => {
@@ -14,6 +15,7 @@ const routerInit = (app) => {
   app.use("/user", userRouter);
   app.use("/file", authorization, fileRouter);
   app.use("/invitation", authorization, invitationRouter);
+  app.use("/gemini", authorization, geminiRouter);
 };
 
 export default routerInit;
