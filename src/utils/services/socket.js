@@ -1,6 +1,9 @@
 import { Server as SocketServer } from "socket.io";
+import dotenv from "dotenv";
 import File from "../../models/file.js";
 import User from "../../models/user.js";
+
+dotenv.config();
 
 let io;
 let socketInstance;
