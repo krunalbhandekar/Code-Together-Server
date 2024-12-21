@@ -7,6 +7,7 @@ import Invitation from "../models/invitation.js";
 import Status from "../utils/enums/status.js";
 import ErrorMessages from "../utils/enums/error-messages.js";
 import InvitationHook from "../utils/hooks/invitation.js";
+import { getIoInstance, onlineUsers } from "../utils/services/socket.js";
 
 const { has } = lodash;
 
@@ -92,7 +93,14 @@ router.post("/", async (req, res) => {
     });
 
     if (user) {
-      // send real-time notification if user exixts
+      // send real-time notification if user exists
+      const io = getIoInstance();
+      const userSocketId = onlineUsers.get(String(user._id));
+      if (userSocketId) {
+        io.to(userSocketId).emit("invitation-update", {
+          message: `${req.user.name} invited you`,
+        });
+      }
     }
 
     // send email notification on receiver email
@@ -123,8 +131,16 @@ router.put(":id", async (req, res) => {
         .status(HttpStatus.OK)
         .send({ status: Status.ERROR, error: "Invitation not found" });
     }
+
     const result = await Invitation.updateOne({ _id }, { $set: { status } });
     if (result.modifiedCount > 0) {
+      const io = getIoInstance();
+      const userSocketId = onlineUsers.get(String(invitation.sender));
+      if (userSocketId) {
+        io.to(userSocketId).emit("collaborator-update", {
+          message: `${req.user.name} ${status} your invitation`,
+        });
+      }
       return res.status(HttpStatus.OK).send({ status: Status.SUCCESS });
     }
 
