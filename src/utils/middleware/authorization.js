@@ -10,7 +10,7 @@ const authorization = async (req, res, next) => {
   const token = req.headers.authorization;
   if (!token) {
     return res
-      .Status(HttpStatus.OK)
+      .status(HttpStatus.OK)
       .send({ status: Status.UNAUTHORIZED, error: "Unauthorized" });
   }
 
