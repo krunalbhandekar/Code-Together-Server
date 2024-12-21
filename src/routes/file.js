@@ -4,6 +4,7 @@ import File from "../models/file.js";
 import Status from "../utils/enums/status.js";
 import logger from "../utils/logger.js";
 import ErrorMessages from "../utils/enums/error-messages.js";
+import FileHook from "../utils/hooks/file.js";
 
 const router = express.Router();
 
@@ -80,6 +81,7 @@ router.delete("/:id", async (req, res) => {
 
     const result = await File.deleteOne({ _id });
     if (result.deletedCount > 0) {
+      FileHook.afterDelete(file._id);
       return res.status(HttpStatus.OK).send({ status: Status.SUCCESS });
     }
 
