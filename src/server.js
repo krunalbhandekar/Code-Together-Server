@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import logger from "./utils/logger.js";
 import mongoDbInit from "./utils/services/mongodb.js";
 import routerInit from "./router.js";
+import { socketInit } from "./utils/services/socket.js";
 
 dotenv.config();
 
@@ -28,6 +29,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 routerInit(app);
 
 const server = http.createServer(app);
+
+// Initialize the Socket.io connection
+socketInit(server);
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
