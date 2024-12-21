@@ -9,12 +9,13 @@ import generateOtp from "../utils/helper/generateOtp.js";
 import UserHook from "../utils/hooks/user.js";
 import logger from "../utils/logger.js";
 import comparePassword from "../utils/helper/comparePassword.js";
+import sendEmailNotification from "../utils/services/nodemailser.js";
 
 dotenv.config();
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -34,6 +35,8 @@ router.post("/", async (req, res) => {
     await user.save();
 
     UserHook.afterCreate(user._id);
+
+    await sendEmailNotification({ to: user.email, subject: "OTP", text: otp });
 
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS });
   } catch (err) {
