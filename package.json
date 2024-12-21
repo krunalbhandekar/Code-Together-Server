@@ -1,5 +1,5 @@
 {
-  "name": "code-Together-Server",
+  "name": "Code-Together-Server",
   "version": "0.0.1",
   "description": "This is the server of code together project",
   "main": "src/server.js",
