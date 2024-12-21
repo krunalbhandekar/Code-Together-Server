@@ -2,6 +2,7 @@ import { Server as SocketServer } from "socket.io";
 import dotenv from "dotenv";
 import File from "../../models/file.js";
 import User from "../../models/user.js";
+import executeCode from "./code-execute.js";
 
 dotenv.config();
 
@@ -60,6 +61,10 @@ const socketInit = (server) => {
 
       // real-time update code for active collaborators
       return socket.to(fileId).emit("file-updated", { id: file._id, content });
+    });
+
+    socket.on("execute-code", ({ language, content }) => {
+      executeCode({ socket, language, content });
     });
 
     socket.on("disconnect", () => {
