@@ -17,7 +17,7 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, designation, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser && existingUser.isVerified) {
@@ -28,7 +28,7 @@ router.post("/register", async (req, res) => {
 
     const otp = generateOtp();
 
-    const user = existingUser || new User({ name, email });
+    const user = existingUser || new User({ name, designation, email });
     user.password = password;
     user.otp = otp;
     user.otpExpiredAt = Date.now() + 5 * 60 * 1000; // Otp expires in 5 minute
