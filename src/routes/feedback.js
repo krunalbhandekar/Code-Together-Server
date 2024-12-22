@@ -5,14 +5,16 @@ import Status from "../utils/enums/status.js";
 import logger from "../utils/logger.js";
 import ErrorMessages from "../utils/enums/error-messages.js";
 import FeedbackHook from "../utils/hooks/feedback.js";
+import authorization from "../utils/middleware/authorization.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async (_, res) => {
   try {
-    const feedbacks = await Feedback.find().populate([
-      { path: "createdBy", select: { name: true, email: true } },
-    ]);
+    const feedbacks = await Feedback.find().populate({
+      path: "createdBy",
+      select: "name designation",
+    });
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, feedbacks });
   } catch (err) {
     if (err instanceof Error) {
@@ -24,7 +26,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authorization, async (req, res) => {
   try {
     const { content } = req.body;
 

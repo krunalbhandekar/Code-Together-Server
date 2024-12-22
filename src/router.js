@@ -28,7 +28,7 @@ const routerInit = (app) => {
   app.use("/file", authorization, fileRouter);
   app.use("/invitation", authorization, invitationRouter);
   app.use("/gemini", authorization, geminiRouter);
-  app.use("/feedback", authorization, feedbackRouter);
+  app.use("/feedback", feedbackRouter);
 };
 
 export default routerInit;
