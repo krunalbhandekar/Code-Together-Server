@@ -7,6 +7,7 @@ import logger from "../utils/logger.js";
 import ErrorMessages from "../utils/enums/error-messages.js";
 import checkGeminiRateLimit from "../utils/middleware/checkGeminiRateLimit.js";
 import getGeminiResponse from "../utils/services/gemini.js";
+import File from "../models/file.js";
 
 const { has } = lodash;
 
@@ -64,6 +65,39 @@ router.post("/", async (req, res) => {
     res
       .status(HttpStatus.OK)
       .send({ status: Status.ERROR, error: ErrorMessages.E1003 });
+  }
+});
+
+router.delete("/:fileId", async (req, res) => {
+  try {
+    const { fileId } = req.params;
+
+    const file = await File.findOne({ _id: fileId });
+    if (!file) {
+      return res.status(HttpStatus.OK).send({
+        status: Status.ERROR,
+        error: "File does not exists",
+      });
+    }
+
+    const result = await Gemini.deleteMany({
+      file: fileId,
+      user: req.user._id,
+    });
+    if (result.deletedCount > 0) {
+      return res.status(HttpStatus.OK).send({ status: Status.SUCCESS });
+    }
+
+    res
+      .status(HttpStatus.OK)
+      .send({ status: Status.ERROR, error: ErrorMessages.E1004 });
+  } catch (err) {
+    if (err instanceof Error) {
+      logger.error("[delete-gemini]", err.message);
+    }
+    res
+      .status(HttpStatus.OK)
+      .send({ status: Status.ERROR, error: ErrorMessages.E1004 });
   }
 });
 

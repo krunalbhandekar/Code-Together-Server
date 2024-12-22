@@ -77,7 +77,7 @@ router.post("/", async (req, res) => {
 
     // delete previous invitatios of same email
     await Invitation.deleteMany({
-      status: ["Pending", "Rejecteds"],
+      status: ["Pending", "Rejected"],
       file: fileId,
       receiverEmail,
     });

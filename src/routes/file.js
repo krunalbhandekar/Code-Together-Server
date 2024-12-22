@@ -73,7 +73,7 @@ router.post("/", async (req, res) => {
     const file = await File.create({
       name,
       language,
-      content: "",
+      content: "// write your code here",
       createdBy: req?.user ? req.user._id : null,
     });
 
