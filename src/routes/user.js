@@ -10,6 +10,7 @@ import UserHook from "../utils/hooks/user.js";
 import logger from "../utils/logger.js";
 import comparePassword from "../utils/helper/comparePassword.js";
 import sendEmailNotification from "../utils/services/nodemailser.js";
+import getEmailTemplate from "../utils/email-templates.js";
 
 dotenv.config();
 
@@ -34,9 +35,18 @@ router.post("/register", async (req, res) => {
     user.otpExpiredAt = Date.now() + 5 * 60 * 1000; // Otp expires in 5 minute
     await user.save();
 
-    UserHook.afterCreate(user._id);
+    await UserHook.afterCreate(user._id);
 
-    await sendEmailNotification({ to: user.email, subject: "OTP", text: otp });
+    let emailTemplate = await getEmailTemplate({ template_id: "otp" });
+    if (emailTemplate) {
+      emailTemplate = emailTemplate.replace("{{OTP}}", otp);
+
+      await sendEmailNotification({
+        to: user.email,
+        subject: `Verify your account: Code Together`,
+        html: emailTemplate,
+      });
+    }
 
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS });
   } catch (err) {
