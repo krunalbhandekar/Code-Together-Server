@@ -31,11 +31,13 @@ router.get("/", async (req, res) => {
       query.receiver = { $in: value };
     }
 
-    const invitations = await Invitation.find(query).populate([
-      { path: "receiver", select: { name: true, email: true } },
-      { path: "sender", select: { name: true } },
-      { path: "file", select: { name: true } },
-    ]);
+    const invitations = await Invitation.find(query)
+      .sort({ createdAt: -1 })
+      .populate([
+        { path: "receiver", select: { name: true, email: true } },
+        { path: "sender", select: { name: true } },
+        { path: "file", select: { name: true } },
+      ]);
 
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, invitations });
   } catch (err) {
