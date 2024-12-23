@@ -3,7 +3,7 @@ import fs from "fs-extra";
 
 const __dirname = process.cwd();
 
-const templateIds = ["otp", "feedback_reply"]; // here ids means email template file name
+const templateIds = ["otp", "feedback_reply", "collab_invite"]; // here ids means email template file name
 
 const templatePaths = templateIds.reduce((acc, id) => {
   acc[id] = path.join(__dirname, `/src/assets/email-templates/${id}.html`);
