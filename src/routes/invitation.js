@@ -68,7 +68,7 @@ router.post("/", async (req, res) => {
       file: fileId,
       receiverEmail,
     });
-    if (isAlreadyCollaborator) {
+    if (isAlreadyCollaborator || receiverEmail === req.user.email) {
       return res.status(HttpStatus.OK).send({
         status: Status.ERROR,
         error: `${receiverEmail} is already a collaborator of this file`,
@@ -117,7 +117,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put(":id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   const _id = req.params.id;
   const { status } = req.body;
   try {

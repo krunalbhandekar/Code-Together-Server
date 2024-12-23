@@ -55,6 +55,24 @@ router.get("/:id", async (req, res) => {
         .send({ status: Status.ERROR, error: "File does not exists" });
     }
 
+    const invitations = await Invitation.find({
+      file: _id,
+      status: "Accepted",
+    }).distinct("receiver");
+
+    const collaboratorIds = invitations.map((e) => String(e));
+    collaboratorIds.push(String(file.createdBy._id));
+
+    //allow only those users who is collaborator/admin of this file
+    if (!collaboratorIds.includes(String(req.user._id))) {
+      return res
+        .status(HttpStatus.OK)
+        .send({
+          status: Status.ERROR,
+          error: "You are not allow to access this file",
+        });
+    }
+
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, file });
   } catch (err) {
     if (err instanceof Error) {

@@ -115,7 +115,12 @@ router.post("/login", async (req, res) => {
     res.status(HttpStatus.OK).send({
       status: Status.SUCCESS,
       token,
-      user: { _id: user._id, name: user.name, email: user.email },
+      user: {
+        _id: user._id,
+        name: user.name,
+        designation: user.designation,
+        email: user.email,
+      },
     });
   } catch (err) {
     if (err instanceof Error) {
