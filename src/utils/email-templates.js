@@ -3,9 +3,12 @@ import fs from "fs-extra";
 
 const __dirname = process.cwd();
 
-const templatePaths = {
-  otp: path.join(__dirname, "/src/assets/email-templates/otp.html"),
-};
+const templateIds = ["otp", "feedback_reply"]; // here ids means email template file name
+
+const templatePaths = templateIds.reduce((acc, id) => {
+  acc[id] = path.join(__dirname, `/src/assets/email-templates/${id}.html`);
+  return acc;
+}, {});
 
 const getEmailTemplate = async ({ template_id }) => {
   const currentYear = new Date().getFullYear();
