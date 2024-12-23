@@ -14,7 +14,7 @@ const afterCreate = async (_id) => {
   if (emailTemplate) {
     emailTemplate = emailTemplate
       .replace("{{SENDER}}", invitation.sender.name)
-      .replace("{{LOGIN_LINK}}", `${process.env.SERVER_URL}/login`);
+      .replace("{{LOGIN_LINK}}", `${process.env.REACT_APP_URL}/login`);
 
     await sendEmailNotification({
       to: invitation.receiverEmail,
