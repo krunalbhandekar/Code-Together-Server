@@ -29,6 +29,7 @@ const sendEmailNotification = async ({
       const mailOptions = {
         from: `${process.env.NODEMAILER_APP_NAME} <${process.env.NODEMAILER_USER}>`,
         to,
+        replyTo: process.env.NODEMAILER_USER,
         subject,
         text,
         html,
