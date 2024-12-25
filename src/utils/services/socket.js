@@ -2,7 +2,7 @@ import { Server as SocketServer } from "socket.io";
 import dotenv from "dotenv";
 import File from "../../models/file.js";
 import User from "../../models/user.js";
-import executeCode from "./code-execute.js";
+import execute from "./code-execute.js";
 
 dotenv.config();
 
@@ -64,7 +64,16 @@ const socketInit = (server) => {
     });
 
     socket.on("execute-code", ({ language, content }) => {
-      executeCode({ socket, language, content });
+      switch (language) {
+        case "javascript":
+          return execute.javascript({ socket, content });
+        case "python":
+          return execute.python({ socket, content });
+        default:
+          return socket.emit("execution-result", {
+            result: "Unsupported language",
+          });
+      }
     });
 
     socket.on("disconnect", () => {
