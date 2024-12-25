@@ -6,6 +6,7 @@ import logger from "../utils/logger.js";
 import ErrorMessages from "../utils/enums/error-messages.js";
 import FileHook from "../utils/hooks/file.js";
 import Invitation from "../models/invitation.js";
+import getDefaultContent from "../utils/helper/getDefaultContent.js";
 
 const router = express.Router();
 
@@ -89,7 +90,7 @@ router.post("/", async (req, res) => {
     const file = await File.create({
       name,
       language,
-      content: "// write your code here",
+      content: getDefaultContent(language),
       createdBy: req?.user ? req.user._id : null,
     });
 
