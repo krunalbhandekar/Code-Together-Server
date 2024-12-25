@@ -65,12 +65,10 @@ router.get("/:id", async (req, res) => {
 
     //allow only those users who is collaborator/admin of this file
     if (!collaboratorIds.includes(String(req.user._id))) {
-      return res
-        .status(HttpStatus.OK)
-        .send({
-          status: Status.ERROR,
-          error: "You are not allow to access this file",
-        });
+      return res.status(HttpStatus.OK).send({
+        status: Status.ERROR,
+        error: "You are not allow to access this file",
+      });
     }
 
     res.status(HttpStatus.OK).send({ status: Status.SUCCESS, file });
@@ -121,7 +119,7 @@ router.delete("/:id", async (req, res) => {
     const result = await File.deleteOne({ _id });
     if (result.deletedCount > 0) {
       FileHook.afterDelete(file._id);
-      return res.status(HttpStatus.OK).send({ status: Status.SUCCESS });
+      return res.status(HttpStatus.OK).send({ status: Status.SUCCESS, file });
     }
 
     res
