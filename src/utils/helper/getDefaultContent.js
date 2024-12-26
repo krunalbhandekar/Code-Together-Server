@@ -1,6 +1,7 @@
 const symbol = {
   javascript: "//",
   python: "#",
+  cpp: "//",
 };
 
 const getDefaultContent = (language) => {

@@ -18,5 +18,14 @@ else
     echo "python is already installed"
 fi
 
+# Install g++ if not installed
+if ! command -v g++ &> /dev/null
+then
+    echo "g++ could not be found, installing..."
+    apt-get update && apt-get install -y g++
+else
+    echo "g++ is already installed"
+fi
+
 # Install dependencies
 npm install

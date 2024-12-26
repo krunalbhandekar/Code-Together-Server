@@ -69,6 +69,8 @@ const socketInit = (server) => {
           return execute.javascript({ socket, content });
         case "python":
           return execute.python({ socket, content });
+        case "cpp":
+          return execute.cpp({ userId, socket, content });
         default:
           return socket.emit("execution-result", {
             result: "Unsupported language",
