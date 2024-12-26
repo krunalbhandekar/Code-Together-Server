@@ -128,9 +128,6 @@ const cpp = async ({ userId, socket, content, runtime = 10000 }) => {
       const timeout = setTimeout(() => {
         execProcess.kill("SIGKILL");
         socket.emit("execution-result", { result: "Execution timed out" });
-
-        fs.unlink(path.join(userDir, exeFile));
-        fs.unlink(cppFilePath);
       }, runtime);
 
       execProcess.stdout.on("data", (data) => {
@@ -158,6 +155,7 @@ const cpp = async ({ userId, socket, content, runtime = 10000 }) => {
       });
     } else {
       socket.emit("execution-result", { result: "Compilation failed" });
+      fs.unlink(path.join(userDir, exeFile));
       fs.unlink(cppFilePath);
     }
   });
