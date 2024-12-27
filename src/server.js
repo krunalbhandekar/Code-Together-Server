@@ -7,11 +7,15 @@ import logger from "./utils/logger.js";
 import mongoDbInit from "./utils/services/mongodb.js";
 import routerInit from "./router.js";
 import { socketInit } from "./utils/services/socket.js";
+import agendaInit from "./utils/agenda.js";
 
 dotenv.config();
 
 // Initialize the MongoDB connection
 mongoDbInit();
+
+// Initialize the job scheduler with agenda
+agendaInit();
 
 const app = express();
 
