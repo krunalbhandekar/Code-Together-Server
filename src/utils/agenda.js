@@ -1,11 +1,20 @@
 import { Agenda } from "agenda";
 import logger from "./logger.js";
+import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 let agenda = null;
 
 const jobs = () => {
-  agenda.define("check_inactivity", () => {
-    logger.info("check_render_server_inactivity");
+  agenda.define("check_inactivity", async () => {
+    try {
+      const res = await axios.get(process.env.SERVER_URL);
+      logger.info("check_render_server_inactivity", res.data);
+    } catch (err) {
+      logger.error("check_render_server_inactivity", err.message);
+    }
   });
 };
 
