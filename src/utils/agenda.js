@@ -28,8 +28,8 @@ const agendaInit = async () => {
 
   const timezone = { timezone: "Asia/Kolkata" };
 
-  // to avoid spin down
-  await agenda.every("14 minutes", "check_inactivity", {}, timezone);
+  // to avoid spin down run every hour
+  await agenda.every("0 * * * *", "check_inactivity", {}, timezone);
 };
 
 export default agendaInit;
